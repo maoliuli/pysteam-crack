@@ -7,7 +7,9 @@ interface Game {
   appid: string;
   name: string;
   path: string;
-  icon_path?: string;
+  arguments: string;
+  disable_overlay: boolean;
+  offline_mode: boolean;
 }
 
 const games = ref<Game[]>([]);
@@ -16,7 +18,10 @@ const gameToAdd = ref<Game>({
   appid: "",
   name: "",
   path: "",
-  icon_path: ""
+  arguments: "",
+  disable_overlay: false,
+  offline_mode: false
+
 });
 const test1 = ref("");
 const theme = ref(localStorage.getItem('theme') || 'light'); // 从本地存储读取主题
@@ -94,7 +99,7 @@ async function updateGame(game: Game) {
     
     showMessage("游戏更新成功", "success");
     isEditing.value = false;
-    gameToAdd.value = { appid: "", name: "", path: "", icon_path: "" };
+    gameToAdd.value = { appid: "", name: "", path: "",  arguments: "", disable_overlay: false, offline_mode: false};
   } catch (error) {
     showMessage(`更新游戏失败: ${error}`, "error");
   }
@@ -213,7 +218,7 @@ function startEditGame(game: Game) {
 
 // 开始添加游戏
 function startAddGame() {
-  gameToAdd.value = { appid: "", name: "", path: "", icon_path: "" };
+  gameToAdd.value = { appid: "", name: "", path: "",  arguments: "", disable_overlay: false, offline_mode: false};
   isEditing.value = false;
   activeTab.value = 'steam';
   showAddGameModal.value = true;
@@ -374,26 +379,46 @@ onMounted(() => {
           />
         </div>
 
+
+
         <!-- 手动添加/编辑表单 -->
         <div v-if="isEditing || activeTab === 'manual'" class="form-control">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">游戏ID</span>
-            </label>
-            <input v-model="gameToAdd.appid" type="text" placeholder="输入Steam AppID" class="input input-bordered" :disabled="isEditing" />
+          
+          <div class="flex w-full gap-4">
+            <fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+              <label class="fieldset-label">游戏ID</label>
+              <input v-model="gameToAdd.appid" type="text" class="input" placeholder="输入游戏SteamAppID" :disabled="isEditing" />
+
+              <label class="fieldset-label">游戏名称</label>
+              <input v-model="gameToAdd.name" type="text" class="input" placeholder="输入游戏名" />
+
+              <label class="fieldset-label">游戏目录</label>
+              <input v-model="gameToAdd.path" type="text" class="input" placeholder="输入游戏安装目录" />
+
+              <label class="fieldset-label">启动参数</label>
+              <label class="input">
+                <input v-model="gameToAdd.arguments" type="text" class="grow" placeholder="启动参数" />
+                <span class="badge badge-neutral badge-xs">可选</span>
+              </label>
+              <div class="flex w-full">
+                <fieldset class="fieldset p-2 bg-base-100 border border-base-300 rounded-box w-32">
+                  <legend class="fieldset-legend">离线启动</legend>
+                  <input v-model="gameToAdd.offline_mode" type="checkbox" checked="checked" class="toggle toggle-warning" />
+                </fieldset>
+                <fieldset class="fieldset p-2 bg-base-100 border border-base-300 rounded-box w-32">
+                  <legend class="fieldset-legend">禁用游戏内覆盖</legend>
+                  <input v-model="gameToAdd.disable_overlay" type="checkbox" checked="checked" class="toggle toggle-warning" />
+                </fieldset>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+              <label class="fieldset-label">游戏启动项</label>
+
+            </fieldset>
+
           </div>
-          <div class="form-control mt-2">
-            <label class="label">
-              <span class="label-text">游戏名称</span>
-            </label>
-            <input v-model="gameToAdd.name" type="text" placeholder="输入游戏名称" class="input input-bordered" />
-          </div>
-          <div class="form-control mt-2">
-            <label class="label">
-              <span class="label-text">游戏路径</span>
-            </label>
-            <input v-model="gameToAdd.path" type="text" placeholder="输入游戏路径" class="input input-bordered" />
-          </div>
+          
           <div class="mt-4 flex justify-between">
             <button @click="showAddGameModal = false" class="btn">取消</button>
             <button @click="handleGameSubmit(gameToAdd)" class="btn btn-primary">
