@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, provide } from "vue";
+import userSettings from "./components/user.vue";
 
 // 定义游戏数据接口
 interface Game {
@@ -27,20 +28,6 @@ const showSettingsModal = ref(false); // 添加设置弹窗控制
 const activeView = ref('games'); // 控制当前显示的视图
 function switchView(view: string) { // 切换视图的方法
   activeView.value = view;
-}
-
-
-
-
-async function pytest() {
-  try {
-    // Python 函数: test() -> List[Dict]
-    // 返回值: test
-    test1.value = await window.pywebview.api.test();
-    showMessage(test1, "success");
-  } catch (error) {
-    showMessage(`链接失败: ${error}`, "error");
-  }
 }
 
 // 获取游戏列表
@@ -181,6 +168,7 @@ function showMessage(text: string, type: 'success' | 'error' | 'warning' | 'info
     }, 3000);
   }
 }
+provide('showMessage', showMessage);
 
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light';
@@ -296,17 +284,10 @@ onMounted(() => {
     </ul>
     
     <!--导航栏结束-->
-    <div class="toast toast-top toast-end">
-      <div id="alert-message" class="alert alert-info" style="display: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span>{{ message }}</span>
-      </div>
-    </div>
 
     <!-- 主内容区：游戏列表 -->
     <div class="main-content" v-if="activeView === 'games'">
     <!--div class="flex-1 container mx-auto p-4 ml-16 overflow-y-auto h-screen"-->
-      <!-- 消息提示 -->
 
 
 
@@ -359,6 +340,14 @@ onMounted(() => {
     <!-- 设置区 -->
     <div class="main-content" v-if="activeView === 'setup'">
       <Settings />
+    </div>
+
+    <!--消息框-->
+    <div class="toast toast-top toast-end">
+      <div id="alert-message" class="alert alert-info" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>{{ message }}</span>
+      </div>
     </div>
 
 

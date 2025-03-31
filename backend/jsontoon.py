@@ -1,5 +1,5 @@
 import json
-
+import os
 
 class JSONConfig:
     def __init__(self, json_path):
@@ -60,3 +60,37 @@ class JSONConfig:
                 else:
                     print(f"错误: 键 {key} 不存在。")
                     return False
+
+
+
+
+
+def read_txt(file_path: str) -> str | bool:
+    """
+    读取txt文件
+    :param file_path: 文件路径
+    :return: 文件内容/""
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return file.read()
+    except (FileNotFoundError, PermissionError, UnicodeDecodeError):
+        return ""
+    
+def write_txt(file_path: str, content: str, mode: str = 'w') -> bool:
+    """
+    写入txt文件（自动创建目录和文件）
+    :param file_path: 文件路径
+    :param content: 要写入的内容
+    :param mode: 'w'-覆盖 / 'a'-追加
+    :return: 是否成功
+    """
+    try:
+        # 自动创建目录（如果不存在）
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        
+        with open(file_path, mode, encoding='utf-8') as f:
+            f.write(content)
+        return True
+    except Exception:
+        return False

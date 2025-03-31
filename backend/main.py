@@ -36,6 +36,8 @@ def start_app():
                   manager.delete_game,
                   manager.get_games,
                   manager.add_game,
+                  manager.getUserSettup,
+                  manager.setUserSettup,
                   manager.test
                   )
     

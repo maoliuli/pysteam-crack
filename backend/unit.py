@@ -5,7 +5,7 @@ import os
 from typing import Optional
 import winreg
 
-gameconfig = jsontoon.JSONConfig(config.gameconfig_path)
+
 
 def read_registry(
     hive: int,
@@ -37,6 +37,8 @@ def add_game_lnk(appid):
     根据给定的 appid 创建游戏快捷方式
     :param appid: 游戏的应用程序 ID
     """
+    gameconfig = jsontoon.JSONConfig(config.gameconfig_path)
+    
     df = gameconfig.read(appid)
     icon_path = df["path"]
     app_name = df["name"]

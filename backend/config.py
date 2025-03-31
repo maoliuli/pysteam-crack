@@ -2,11 +2,13 @@ import os
 import json
 from pathlib import Path
 local_appdata_path = os.environ.get('LOCALAPPDATA')  # Local 目录
+Roaming_appdata_path = os.environ.get('APPDATA')  # Roaming 目录
 
 appname = "pysteam-crack"
 userconfig_path =local_appdata_path + f"\\{appname}\\userconfig.json"
 gameconfig_path = local_appdata_path + f"\\{appname}\\gameconfig.json"
 
+GoldbergUser_path = Roaming_appdata_path + f"\\Goldberg SteamEmu Saves\\settings\\"
 
 
 

@@ -76,6 +76,7 @@ class GameManager:
 
     def create_desktop_shortcut(self, appid: str) -> str:
         """创建桌面快捷方式"""
+        print("--创建桌面快捷方式--")
         if unit.add_game_lnk(str(appid)):
             return "桌面快捷方式创建成功"
         
@@ -83,6 +84,7 @@ class GameManager:
 
     def launch_game(self, appid: str) -> str:
         """启动游戏"""
+        print("--启动游戏--")
         game = next((g for g in self.games if g['appid'] == appid), None)
         if game:
             # 这里实现启动游戏的逻辑
@@ -94,3 +96,26 @@ class GameManager:
         # 这里实现从Steam导入游戏的逻辑
         steam_games = []  # 从Steam获取的游戏列表
         return steam_games
+    
+
+
+    def getUserSettup(self) -> List[Dict]:
+        """获取用户设置"""
+        print("--获取用户设置--")
+        user_name = jsontoon.read_txt(config.GoldbergUser_path+"account_name.txt")
+        port = jsontoon.read_txt(config.GoldbergUser_path+"listen_port.txt")
+        steamid = jsontoon.read_txt(config.GoldbergUser_path+"user_steam_id.txt")
+        language = jsontoon.read_txt(config.GoldbergUser_path+"language.txt")
+
+        list1 = {"account_name": user_name, "listen_port": port, "steam_id": steamid, "language": language}
+        return list1
+    
+    def setUserSettup(self, user_settup: Dict) -> List[Dict]:
+        """设置用户设置"""
+        print("--设置用户设置--")
+        print(user_settup)
+        jsontoon.write_txt(config.GoldbergUser_path+"account_name.txt", user_settup["account_name"])
+        jsontoon.write_txt(config.GoldbergUser_path+"listen_port.txt", str(user_settup["listen_port"]))
+        jsontoon.write_txt(config.GoldbergUser_path+"user_steam_id.txt", user_settup["steam_id"])
+        jsontoon.write_txt(config.GoldbergUser_path+"language.txt", user_settup["language"])
+        return True

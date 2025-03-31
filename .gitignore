@@ -12,5 +12,9 @@ frontend\node_modules
 
 
 dist
-backend\__pycache__
+backend/__pycache__/
 startgame.exe
+backend/__pycache__/commands.cpython-312.pyc
+backend/__pycache__/config.cpython-312.pyc
+backend/__pycache__/jsontoon.cpython-312.pyc
+backend/__pycache__/unit.cpython-312.pyc
