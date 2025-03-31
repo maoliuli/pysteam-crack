@@ -242,9 +242,10 @@ async function handleGameSubmit(game: Game) {
 }
 
 onMounted(() => {
-  getGames();
-  pytest();
   document.documentElement.setAttribute('data-theme', theme.value);
+  setTimeout(() => {
+    getGames();
+  }, 300); // 1000ms = 1秒
 });
 </script>
 
