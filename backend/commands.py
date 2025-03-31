@@ -2,6 +2,7 @@ from typing import List, Dict
 import jsontoon
 import config
 import unit 
+import rungame
 
 userconfig = jsontoon.JSONConfig(config.userconfig_path)
 gameconfig = jsontoon.JSONConfig(config.gameconfig_path)
@@ -85,11 +86,8 @@ class GameManager:
     def launch_game(self, appid: str) -> str:
         """启动游戏"""
         print("--启动游戏--")
-        game = next((g for g in self.games if g['appid'] == appid), None)
-        if game:
-            # 这里实现启动游戏的逻辑
-            return f"正在启动 {game['name']}"
-        return "游戏未找到"
+        rungame.startGame(str(appid))
+        return True
 
     def import_steam_games(self) -> List[Dict]:
         """从Steam导入游戏"""

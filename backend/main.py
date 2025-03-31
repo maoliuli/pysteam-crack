@@ -38,6 +38,7 @@ def start_app():
                   manager.add_game,
                   manager.getUserSettup,
                   manager.setUserSettup,
+                  manager.launch_game,
                   manager.test
                   )
     
