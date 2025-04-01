@@ -131,6 +131,18 @@ async function launchGame(appid: string) {
   }
 }
 
+async function SteamOpen(appid) {
+  try {
+    // Python 函数: launch_game(appid: str) -> str
+    // 参数: appid - 要启动的游戏ID
+    // 返回值: 操作结果消息字符串
+    const result = await window.pywebview.api.openWebview(`https://steamcommunity.com/app/${appid}/workshop/`,"Steam创意工坊");
+    showMessage(result, "success");
+  } catch (error) {
+    showMessage(`启动失败: ${error}`, "error");
+  }
+}
+
 // 处理从Steam导入的游戏
 async function handleSteamGames(steamGames: Game[]) {
   for (const game of steamGames) {
@@ -319,6 +331,7 @@ onMounted(() => {
                 <div tabindex="0" role="button" class="btn m-1 h-5">...</div>
                 <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-34 p-2 shadow-sm">
                   <button class="btn btn-soft btn-accent" @click="launchGame(game.appid)">启动</button>
+                  <button class="btn btn-soft btn-accent" @click="SteamOpen(game.appid)">打开创意工坊</button>
                   <button class="btn btn-soft btn-info"  @click="createDesktopShortcut(game.appid)">创建快捷方式</button>
                   <button class="btn btn-soft btn-primary" @click="startEditGame(game)">编辑</button>
                   <button class="btn btn-soft btn-error" @click="deleteGame(game.appid)">删除</button>
@@ -335,7 +348,7 @@ onMounted(() => {
     </div>
 
     <div class="main-content" v-if="activeView === 'browser'">
-      
+      <browser />
     </div>
 
     <div class="main-content" v-if="activeView === 'account'">
@@ -344,7 +357,6 @@ onMounted(() => {
 
     <!-- 设置区 -->
     <div class="main-content" v-if="activeView === 'setup'">
-      <Settings />
     </div>
 
     <!--消息框-->

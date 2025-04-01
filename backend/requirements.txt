@@ -1,2 +1,4 @@
 pywebview
 pyinstaller
+bs4
+win10toast

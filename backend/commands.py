@@ -3,6 +3,11 @@ import jsontoon
 import config
 import unit 
 import rungame
+import steam
+import win10toast
+
+toaster = win10toast.ToastNotifier()
+
 
 userconfig = jsontoon.JSONConfig(config.userconfig_path)
 gameconfig = jsontoon.JSONConfig(config.gameconfig_path)
@@ -117,3 +122,16 @@ class GameManager:
         jsontoon.write_txt(config.GoldbergUser_path+"user_steam_id.txt", user_settup["steam_id"])
         jsontoon.write_txt(config.GoldbergUser_path+"language.txt", user_settup["language"])
         return True
+    
+    def SteamOutUrl(self,url):
+        print("--SteamOutUrl--")
+        print(url)
+        workshopid = steam.extract_workshop_id(url)
+        appid = steam.get_clean_appid_from_workshop(workshopid)
+        steam.run_steamcmd(appid,workshopid)
+
+def windowstoast(name,text,sleep):
+    try:
+        toaster.show_toast(title=name,msg=text,duration=sleep)
+    except:
+        pass

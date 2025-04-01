@@ -1,6 +1,7 @@
 import os
 import json
 from pathlib import Path
+exe_path = os.getcwd() # 获取当前目录
 local_appdata_path = os.environ.get('LOCALAPPDATA')  # Local 目录
 Roaming_appdata_path = os.environ.get('APPDATA')  # Roaming 目录
 
@@ -10,6 +11,8 @@ gameconfig_path = local_appdata_path + f"\\{appname}\\gameconfig.json"
 
 GoldbergUser_path = Roaming_appdata_path + f"\\Goldberg SteamEmu Saves\\settings\\"
 
+steamcmd_path =  exe_path+"\\lib\\steamcmd\\"
+Goldberg_path = exe_path+"\\lib\\GoldbergSteamEmu\\"
 
 
 

@@ -4,10 +4,6 @@ import configparser
 import subprocess
 import config
 
-# 获取当前工作目录
-exe_path = os.getcwd()
-print(f"Debug: 当前工作目录为 {exe_path}")
-
 
 def startGame(appid):
     gameconfig = jsontoon.JSONConfig(config.gameconfig_path)
@@ -25,7 +21,7 @@ def startGame(appid):
         'SteamClientDll':'steamclient.dll',
         'SteamClient64Dll':'steamclient64.dll'
     }
-    config2_path = os.path.join(exe_path, "backend","lib","GoldbergSteamEmu", 'steam_settings')
+    config2_path = os.path.join(config.Goldberg_path, 'steam_settings')
     if game["disable_overlay"]:
         jsontoon.write_txt(config2_path+"//disable_overlay.txt", config1)
     else:
@@ -38,10 +34,10 @@ def startGame(appid):
         if os.path.exists(config2_path+"//offline.txt") :
             os.remove(config2_path+"//offline.txt")
 
-    config_file_path = os.path.join(exe_path, "backend","lib","GoldbergSteamEmu", 'ColdClientLoader.ini')
+    config_file_path = os.path.join(config.Goldberg_path, 'ColdClientLoader.ini')
     with open(config_file_path, 'w') as configfile:
         config1.write(configfile)
     
-    steam_client_loader_path = os.path.join(exe_path, "backend","lib","GoldbergSteamEmu","steamclient_loader.exe")
-    steam_client_working_dir = os.path.join(exe_path, "backend","lib","GoldbergSteamEmu")
+    steam_client_loader_path = os.path.join(config.Goldberg_path,"steamclient_loader.exe")
+    steam_client_working_dir = os.path.join(config.Goldberg_path)
     subprocess.Popen(steam_client_loader_path, cwd=steam_client_working_dir)

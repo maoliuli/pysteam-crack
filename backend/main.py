@@ -9,12 +9,30 @@ def is_dev_mode():
     """检查是否处于开发模式"""
     return True
 
-# 暴露给前端调用的 Python 函数
-def get_server_time():
-    return f'Python 服务器时间: {time.strftime("%Y-%m-%d %H:%M:%S")}'
-
-
 manager = commands.GameManager()
+
+
+
+# 暴露给前端调用的 Python 函数
+def openWebview(url,name):
+    with open("frontend\\src\\steam.html", 'r', encoding='utf-8') as file:
+        js_code =  file.read()
+
+    def inject_button():
+        window2.evaluate_js(js_code)
+
+    window2 = webview.create_window(
+        name,
+        url=url,
+        width=1000,
+        height=700
+    )
+    window2.expose(manager.SteamOutUrl)
+    
+    window2.events.loaded += inject_button
+
+
+
 def start_app():
     if is_dev_mode():
         # 开发模式：连接 Vite 服务器
@@ -27,8 +45,8 @@ def start_app():
     window = webview.create_window(
         config.appname,
         url=url,
-        width=800,
-        height=600
+        width=1000,
+        height=700
     )
 
     window.expose(manager.update_game,
@@ -39,7 +57,8 @@ def start_app():
                   manager.getUserSettup,
                   manager.setUserSettup,
                   manager.launch_game,
-                  manager.test
+                  manager.test,
+                  openWebview
                   )
     
     webview.start()
