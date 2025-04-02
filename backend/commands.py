@@ -4,9 +4,9 @@ import config
 import unit 
 import rungame
 import steam
-import win10toast
-
-toaster = win10toast.ToastNotifier()
+import time
+import os
+import shutil
 
 
 userconfig = jsontoon.JSONConfig(config.userconfig_path)
@@ -123,15 +123,22 @@ class GameManager:
         jsontoon.write_txt(config.GoldbergUser_path+"language.txt", user_settup["language"])
         return True
     
-    def SteamOutUrl(self,url):
-        print("--SteamOutUrl--")
-        print(url)
-        workshopid = steam.extract_workshop_id(url)
-        appid = steam.get_clean_appid_from_workshop(workshopid)
-        steam.run_steamcmd(appid,workshopid)
+    def SteamOutUrl(self,appid,workshopId,title,show_notification):
+        if steam.run_steamcmd(appid,workshopId,title,show_notification):
+            jsontoon.write_txt(config.Goldberg_path+f"steamapps\\workshop\\content\\{appid}\\{workshopId}\\time.txt", time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+            jsontoon.write_txt(config.Goldberg_path+f"steamapps\\workshop\\content\\{appid}\\{workshopId}\\Nmae.txt", title)
+            show_notification(workshopId, "#4CAF50")
 
-def windowstoast(name,text,sleep):
-    try:
-        toaster.show_toast(title=name,msg=text,duration=sleep)
-    except:
-        pass
+    def delworkshopId(self,appid, workshopId,title, show_notification):
+        if os.path.exists(config.Goldberg_path+f"steamapps\\workshop\\content\\{appid}\\{workshopId}"):
+            shutil.rmtree(config.Goldberg_path+f"\\steamapps\\workshop\\content\\{appid}\\{workshopId}")
+            if not show_notification == "":
+                show_notification(f'⚠️已删除 创意工坊物品: {title}', "#FF9800")
+                show_notification(workshopId, "#FF9800")
+
+    def GetWorkshopVersion(self,appid,workshopId):
+        if os.path.exists(config.Goldberg_path+f"steamapps\\workshop\\content\\{appid}\\{workshopId}"):
+            time = jsontoon.read_txt(config.Goldberg_path+f"steamapps\\workshop\\content\\{appid}\\{workshopId}\\time.txt")
+            return f"✅已安装:\n{time}"
+        else:
+            return "❌未安装:"

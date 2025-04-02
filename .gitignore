@@ -22,3 +22,5 @@ backend/lib/GoldbergSteamEmu/ColdClientLoader.ini
 lib/GoldbergSteamEmu/ColdClientLoader.ini
 lib/SteamCmd/depotcache/
 lib/SteamCmd/logs/
+lib/GoldbergSteamEmu/steamapps/
+lib/SteamCmd/

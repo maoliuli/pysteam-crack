@@ -14,22 +14,38 @@ manager = commands.GameManager()
 
 
 # 暴露给前端调用的 Python 函数
-def openWebview(url,name):
-    with open("frontend\\src\\steam.html", 'r', encoding='utf-8') as file:
-        js_code =  file.read()
+def openWebview(url, name):
+    with open("frontend\\src\\steam.js", 'r', encoding='utf-8') as file:
+        js_code = file.read()
 
     def inject_button():
         window2.evaluate_js(js_code)
+        
+    def show_notification(message,bg_color):
+        # 调用JavaScript中的通知函数
+        window2.evaluate_js(f'window.showNotification("{message}", "{bg_color}");')
+
+    def SteamOutUrl(appid,workshopId,title):
+        manager.SteamOutUrl(appid,workshopId,title,show_notification)
+
+    def delworkshopId(appid, workshopId, title):
+        manager.delworkshopId(appid, workshopId,title, show_notification)
 
     window2 = webview.create_window(
         name,
         url=url,
         width=1000,
-        height=700
+        height=700,
+        text_select=True
+        
     )
-    window2.expose(manager.SteamOutUrl)
+    window2.expose(SteamOutUrl,delworkshopId,manager.GetWorkshopVersion)
+    
+    # 暴露通知函数给Python使用
+    window2.expose(show_notification)
     
     window2.events.loaded += inject_button
+
 
 
 
@@ -58,6 +74,7 @@ def start_app():
                   manager.setUserSettup,
                   manager.launch_game,
                   manager.test,
+                  manager.delworkshopId,
                   openWebview
                   )
     
