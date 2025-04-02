@@ -24,6 +24,7 @@ const gameToAdd = ref<Game>({
 
 });
 const test1 = ref("");
+const df = {}
 const theme = ref(localStorage.getItem('theme') || 'light'); // 从本地存储读取主题
 const message = ref("");
 const activeTab = ref("steam"); // 默认显示Steam导入标签页
@@ -154,6 +155,26 @@ async function handleSteamGames(steamGames: Game[]) {
     } catch (error) {
       showMessage(`添加游戏 ${game.name} 失败: ${error}`, "error");
     }
+  }
+}
+
+async function openFileDialog() {
+  try {
+    const df = await window.pywebview.api.openFileDialog();
+    gameToAdd.value.path = df["path"];
+    gameToAdd.value.name = df["name"];
+    gameToAdd.value.appid = df["appid"]
+  } catch (error) {
+    showMessage(`错误： ${error}`, "error");
+  }
+}
+
+async function openFolderDialog() {
+  try {
+    const df = await window.pywebview.api.openFolderDialog();
+    gameToAdd.value.path = df["path"];
+  } catch (error) {
+    showMessage(`错误：`, "error");
   }
 }
 
@@ -405,7 +426,10 @@ onMounted(() => {
               <input v-model="gameToAdd.name" type="text" class="input" placeholder="输入游戏名" />
 
               <label class="fieldset-label">游戏目录</label>
-              <input v-model="gameToAdd.path" type="text" class="input" placeholder="输入游戏安装目录" />
+              <div class="flex w-full" >
+                <input v-model="gameToAdd.path" type="text" class="input" placeholder="输入游戏安装目录" />
+                <button class="btn btn-neutral join-item" @click="openFileDialog">浏览</button>
+              </div>
 
               <label class="fieldset-label">启动参数</label>
               <label class="input">

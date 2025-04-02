@@ -142,3 +142,6 @@ class GameManager:
             return f"✅已安装:\n{time}"
         else:
             return "❌未安装:"
+        
+    def openFileDialog(self):
+        return unit.openFileDialog()

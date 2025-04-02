@@ -75,6 +75,7 @@ def start_app():
                   manager.launch_game,
                   manager.test,
                   manager.delworkshopId,
+                  manager.openFileDialog,
                   openWebview
                   )
     
